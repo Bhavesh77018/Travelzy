@@ -13,6 +13,7 @@ export interface Trip {
     duration: number;
     dates: string[];
     itinerary: { day: number; title: string; activities: string[] }[];
+    isPromoted?: boolean;
 }
 
 export interface Booking {
@@ -40,6 +41,7 @@ export const TRIPS: Trip[] = [
     {
         id: '1',
         title: 'Magical Ladakh Expedition',
+        isPromoted: true,
         description: 'Experience the breathtaking landscapes of Ladakh, from the high passes to the serene lakes. This 7-day adventure takes you through Leh, Nubra Valley, and Pangong Tso.',
         image: 'https://images.unsplash.com/photo-1483196913501-c88f98c8c767?q=80&w=2070',
         price: 24999,
@@ -168,6 +170,7 @@ export const TRIPS: Trip[] = [
     {
         id: '7',
         title: 'Maldives Luxury Villa',
+        isPromoted: true,
         description: 'Ultimate luxury in an overwater villa. All-inclusive plan with water sports, spa treatments, and private dining.',
         image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=2065',
         price: 250000,
@@ -244,7 +247,7 @@ export const TRIPS: Trip[] = [
             { day: 4, title: 'Temple Tour', activities: ['Neelkanth Mahadev Temple', 'Parmarth Niketan'] },
             { day: 5, title: 'Departure', activities: ['Morning Yoga', 'Airport Drop'] }
         ]
-        ]
+
     }
 ];
 

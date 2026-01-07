@@ -54,10 +54,18 @@ export const AiTravelAssistant: React.FC = () => {
         let replyText = '';
 
         // 1. Keyword Extraction & Filtering
-        if (lowerInput.includes('beach') || lowerInput.includes('sea') || lowerInput.includes('ocean')) {
-            matchedTrips = trips.filter(t => t.destination.toLowerCase().includes('goa') || t.destination.toLowerCase().includes('kerala') || t.title.toLowerCase().includes('beach'));
-        } else if (lowerInput.includes('mountain') || lowerInput.includes('himalaya') || lowerInput.includes('snow') || lowerInput.includes('trek')) {
-            matchedTrips = trips.filter(t => t.destination.toLowerCase().includes('ladakh') || t.destination.toLowerCase().includes('kashmir') || t.title.toLowerCase().includes('trek'));
+        if (lowerInput.includes('beach') || lowerInput.includes('sea') || lowerInput.includes('ocean') || lowerInput.includes('goa')) {
+            matchedTrips = trips.filter(t => t.destination.toLowerCase().includes('goa') || t.destination.toLowerCase().includes('kerala') || t.category === 'Relaxation' || t.title.toLowerCase().includes('beach'));
+        } else if (lowerInput.includes('mountain') || lowerInput.includes('himalaya') || lowerInput.includes('snow') || lowerInput.includes('trek') || lowerInput.includes('ladakh')) {
+            matchedTrips = trips.filter(t => t.destination.toLowerCase().includes('ladakh') || t.destination.toLowerCase().includes('kashmir') || t.destination.toLowerCase().includes('manali') || t.category === 'Adventure');
+        } else if (lowerInput.includes('spiritual') || lowerInput.includes('temple') || lowerInput.includes('yoga') || lowerInput.includes('peace') || lowerInput.includes('meditation') || lowerInput.includes('varanasi') || lowerInput.includes('rishikesh')) {
+            matchedTrips = trips.filter(t => t.category === 'Spiritual' || t.destination.toLowerCase().includes('varanasi') || t.destination.toLowerCase().includes('rishikesh'));
+        } else if (lowerInput.includes('honeymoon') || lowerInput.includes('couple') || lowerInput.includes('romantic') || lowerInput.includes('love')) {
+            matchedTrips = trips.filter(t => t.category === 'Honeymoon' || t.type === 'romantic' || t.destination.toLowerCase().includes('maldives') || t.destination.toLowerCase().includes('swiss'));
+        } else if (lowerInput.includes('family') || lowerInput.includes('kids')) {
+            matchedTrips = trips.filter(t => t.type === 'family' || t.category === 'Cultural');
+        } else if (lowerInput.includes('luxury') || lowerInput.includes('premium') || lowerInput.includes('expensive')) {
+            matchedTrips = trips.filter(t => t.category === 'Luxury' || t.price > 80000);
         } else if (lowerInput.includes('kerala') || lowerInput.includes('south')) {
             matchedTrips = trips.filter(t => t.destination.toLowerCase().includes('kerala'));
         } else {
@@ -68,12 +76,12 @@ export const AiTravelAssistant: React.FC = () => {
         // 2. Budget Filtering
         const budgetMatch = lowerInput.match(/under (\d+)k?/);
         if (budgetMatch) {
-            // Logic handled by simplified regex below
-            // Actually regex might catch '50' then k is outside capture group 1 if we did (\d+)
-            // Let's simplified: look for number.
-            const numbers = lowerInput.match(/(\d+)(?:k|000)/);
+            const numbers = lowerInput.match(/(\d+)(?:k|000)?/);
             if (numbers) {
-                const amount = parseInt(numbers[1]) * 1000;
+                // If it's just "under 15", assume 15k. If "15000", take as is.
+                let amount = parseInt(numbers[1]);
+                if (amount < 1000) amount *= 1000;
+
                 if (matchedTrips.length === 0) matchedTrips = trips; // Reset if only filtering by budget
                 matchedTrips = matchedTrips.filter(t => t.price <= amount);
             }
@@ -81,9 +89,15 @@ export const AiTravelAssistant: React.FC = () => {
 
         // 3. Construct Response
         if (matchedTrips.length > 0) {
-            replyText = `I found ${matchedTrips.length} trips that match your vibe! Check these out:`;
+            const places = Array.from(new Set(matchedTrips.map(t => t.destination))).join(', ');
+            const randomResponses = [
+                `I found ${matchedTrips.length} amazing trips for you, featuring destinations like ${places}. Check these out:`,
+                `Ooh, great choice! Here are some top-rated options for ${lowerInput} that you'll love:`,
+                `Spot on! These trips match your vibe perfectly (` + places + `):`,
+            ];
+            replyText = randomResponses[Math.floor(Math.random() * randomResponses.length)];
         } else {
-            replyText = "I couldn't find exact matches for that right now. Try keywords like 'Beach', 'Mountains', or 'Kerala'. Here are some popular ones instead:";
+            replyText = "I couldn't find exact matches for that right now 😅. Try asking for 'Spiritual trips', 'Beaches under 20k', or 'Luxury Honeymoon'. Here are some popular ones instead:";
             matchedTrips = trips.slice(0, 2); // Fallback
         }
 
@@ -156,7 +170,7 @@ export const AiTravelAssistant: React.FC = () => {
                                                         onClick={() => navigateToTripDetail(trip.id)}
                                                         className="bg-white/10 (msg.sender === 'user' ? '' : 'bg-slate-50') border border-black/5 rounded-xl p-2 flex gap-3 cursor-pointer hover:bg-black/5 transition-colors"
                                                     >
-                                                        <img src={trip.image} alt="trip" className="w-12 h-12 rounded-lg object-cover" />
+                                                        <img src={trip.images[0]} alt="trip" className="w-12 h-12 rounded-lg object-cover" />
                                                         <div className="flex-1 min-w-0">
                                                             <h4 className="font-bold text-xs truncate">{trip.title}</h4>
                                                             <div className="flex justify-between items-center mt-1">

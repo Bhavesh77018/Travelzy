@@ -132,7 +132,7 @@ export const CustomerDashboard: React.FC = () => {
                                 filteredTrips.map((trip) => (
                                     <div key={trip.bookingId} className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-all hover:shadow-md border border-gray-100 flex flex-col md:flex-row">
                                         <div className="relative w-full md:w-64 h-48 md:h-auto">
-                                            <ImageWithFallback src={trip.image} className="h-full w-full object-cover" />
+                                            <ImageWithFallback src={trip.images?.[0] || ''} className="h-full w-full object-cover" />
                                             <div className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary backdrop-blur-sm">
                                                 {trip.status}
                                             </div>

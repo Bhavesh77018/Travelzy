@@ -11,6 +11,9 @@ import type {
     SupportTicket,
     VendorProfile
 } from '../types';
+import { TripService } from '../services/TripService';
+// import { AuthService } from '../services/AuthService';
+import { MessageService } from '../services/MessageService';
 
 // --- Mock Data moved from hook ---
 const MOCK_BOOKINGS: Booking[] = [
@@ -25,8 +28,8 @@ const MOCK_TICKETS: SupportTicket[] = [
 ];
 
 const MOCK_VENDORS: VendorProfile[] = [
-    { id: 'v1', businessName: 'Himalayan Adven.', email: 'himalaya@vendor.com', isVerified: true, revenue: 150000, joinedDate: '2024-01-15', credits: 100 },
-    { id: 'v2', businessName: 'Goa Explores', email: 'goa@vendor.com', isVerified: false, revenue: 45000, joinedDate: '2024-03-10', credits: 50 },
+    { id: 'v1', businessName: 'Himalayan Adven.', email: 'himalaya@vendor.com', isVerified: true, revenue: 150000, joinedDate: '2024-01-15', credits: 100, status: 'VERIFIED' },
+    { id: 'v2', businessName: 'Goa Explores', email: 'goa@vendor.com', isVerified: false, revenue: 45000, joinedDate: '2024-03-10', credits: 50, status: 'PENDING' },
 ];
 
 const INITIAL_STATE: AppState = {
@@ -43,11 +46,14 @@ const INITIAL_STATE: AppState = {
     bookings: MOCK_BOOKINGS,
     tickets: MOCK_TICKETS,
     vendors: MOCK_VENDORS,
+    messages: [],
+    conversations: [],
 };
 
 // Define the Context Type
 export interface AppContextType extends AppState {
     navigateToCustomerHome: () => void;
+    navigateToSearchResults: (query: string) => void;
     navigateToCustomerDashboard: () => void;
     navigateToVendorLanding: () => void;
     navigateToVendorDashboard: () => void;
@@ -62,12 +68,13 @@ export interface AppContextType extends AppState {
     navigateToVendorSupport: () => void;
     navigateToVendorOnboarding: () => void;
     navigateToVendorLogin: () => void;
+
     navigateToVendorSignup: () => void;
+    navigateToVendorMessages: () => void;
     navigateToTripDetail: (tripId: string) => void;
     navigateToBookingCheckout: (bookingData: BookingData) => void;
     navigateToBookingConfirmation: (bookingId: string) => void;
     navigateToAdminLogin: () => void;
-    navigateToAdminDashboard: () => void;
     navigateToAdminDashboard: () => void;
     navigateToAdminVendors: () => void;
     navigateToAdminTrips: () => void;
@@ -84,6 +91,8 @@ export interface AppContextType extends AppState {
     updateBookingStatus: (bookingId: string, status: 'CONFIRMED' | 'CANCELLED') => void;
     verifyVendor: (vendorId: string) => void;
     resolveTicket: (ticketId: string) => void;
+    sendMessage: (text: string, tripId: string, vendorId: string, senderRole: 'customer' | 'vendor') => void;
+    getConversationsForVendor: (vendorId: string) => void;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -94,26 +103,20 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
     useEffect(() => {
         const fetchDeep = async () => {
             try {
-                const [tripsRes, vendorsRes, ticketsRes] = await Promise.all([
-                    fetch('http://localhost:3000/api/trips'),
-                    fetch('http://localhost:3000/api/vendors'),
-                    fetch('http://localhost:3000/api/tickets')
-                ]);
+                // Initialize with Service Layer calls
+                const trips = await TripService.getAllTrips();
+                // Simulate other fetches or keep mocks for now
 
-                if (tripsRes.ok && vendorsRes.ok && ticketsRes.ok) {
-                    const trips = await tripsRes.json();
-                    const vendors = await vendorsRes.json();
-                    const tickets = await ticketsRes.json();
+                setState(prev => ({
+                    ...prev,
+                    trips: trips,
+                    vendors: MOCK_VENDORS, // Can migrate to VendorService later
+                    tickets: MOCK_TICKETS
+                }));
 
-                    setState(prev => ({
-                        ...prev,
-                        trips: trips.length > 0 ? trips : [], // Fallback if API returns empty but we want robustness
-                        vendors: vendors,
-                        tickets: tickets
-                    }));
-                }
             } catch (error) {
                 console.error('Failed to fetch initial data:', error);
+                // Fallback handled by initial state
             }
         };
 
@@ -127,6 +130,12 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     // Navigation Wrappers
     const navigateToCustomerHome = () => navigateTo('CUSTOMER_HOME');
+    const navigateToSearchResults = (query: string) => {
+        // We use window.history to update URL for query params
+        window.history.pushState({}, '', `/?q=${query}&view=search`);
+        setState(prev => ({ ...prev, view: 'SEARCH_RESULTS' }));
+        window.scrollTo(0, 0);
+    };
     const navigateToCustomerDashboard = () => navigateTo('CUSTOMER_DASHBOARD');
     const navigateToVendorLanding = () => navigateTo('VENDOR_LANDING');
     const navigateToVendorDashboard = () => navigateTo('VENDOR_DASHBOARD');
@@ -141,7 +150,9 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
     const navigateToVendorSupport = () => navigateTo('VENDOR_SUPPORT');
     const navigateToVendorOnboarding = () => navigateTo('VENDOR_ONBOARDING');
     const navigateToVendorLogin = () => navigateTo('VENDOR_LOGIN');
+
     const navigateToVendorSignup = () => navigateTo('VENDOR_SIGNUP');
+    const navigateToVendorMessages = () => navigateTo('VENDOR_MESSAGES');
 
     const navigateToAdminLogin = () => navigateTo('ADMIN_LOGIN');
     const navigateToAdminDashboard = () => navigateTo('ADMIN_DASHBOARD');
@@ -240,9 +251,67 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
         }
     };
 
+    // --- Messaging Logic (Via Service) ---
+    const sendMessage = async (text: string, tripId: string, vendorId: string, senderRole: 'customer' | 'vendor') => {
+        const newMessageTemplate: any = {
+            id: 'msg_' + Date.now(),
+            senderId: senderRole === 'customer' ? (state.customerUser?.id || 'guest') : vendorId,
+            receiverId: senderRole === 'customer' ? vendorId : (state.customerUser?.id || 'guest'),
+            senderRole,
+            text,
+            timestamp: new Date().toISOString(),
+            tripId
+        };
+
+        // Call Service
+        const savedMessage = await MessageService.sendMessage(newMessageTemplate);
+
+        setState(prev => {
+            // Update or create conversation
+            const existingConvIndex = prev.conversations.findIndex(c => c.tripId === tripId && c.vendorId === vendorId);
+            let updatedConversations = [...prev.conversations];
+
+            if (existingConvIndex >= 0) {
+                updatedConversations[existingConvIndex] = {
+                    ...updatedConversations[existingConvIndex],
+                    lastMessage: text,
+                    lastMessageTimestamp: newMessageTemplate.timestamp,
+                    unreadCount: senderRole === 'customer' ? updatedConversations[existingConvIndex].unreadCount + 1 : 0
+                };
+            } else {
+                const trip = prev.trips.find(t => t.id === tripId);
+                updatedConversations.push({
+                    id: 'conv_' + Date.now(),
+                    vendorId,
+                    vendorName: prev.vendors.find(v => v.id === vendorId)?.businessName || 'Agency',
+                    customerId: state.customerUser?.id || 'guest',
+                    customerName: state.customerUser?.name || 'Guest User',
+                    tripId,
+                    tripTitle: trip?.title || 'Trip Inquiry',
+                    lastMessage: text,
+                    lastMessageTimestamp: newMessageTemplate.timestamp,
+                    unreadCount: 1
+                });
+            }
+
+            return {
+                ...prev,
+                messages: [...prev.messages, savedMessage],
+                conversations: updatedConversations
+            };
+        });
+    };
+
+    const getConversationsForVendor = (vendorId: string) => {
+        // This is just a helper, state already has all conversations.
+        // In a real app, this might fetch from backend.
+        console.log('Fetching conversations for vendor:', vendorId);
+    };
+
     const value: AppContextType = {
         ...state,
         navigateToCustomerHome,
+        navigateToSearchResults,
         navigateToCustomerDashboard,
         navigateToVendorLanding,
         navigateToVendorDashboard,
@@ -258,6 +327,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
         navigateToVendorOnboarding,
         navigateToVendorLogin,
         navigateToVendorSignup,
+        navigateToVendorMessages,
         navigateToTripDetail,
         navigateToBookingCheckout,
         navigateToBookingConfirmation,
@@ -278,6 +348,8 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
         updateBookingStatus,
         verifyVendor,
         resolveTicket,
+        sendMessage,
+        getConversationsForVendor,
     };
 
     return (

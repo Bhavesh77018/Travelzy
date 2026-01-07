@@ -1,14 +1,19 @@
 import React, { useMemo, useState } from 'react';
-import { MapPin, Clock, Star, ArrowLeft, Check, X, Shield, Users, Calendar as CalendarIcon, Utensils, Info } from 'lucide-react';
+import { MapPin, Clock, Star, ArrowLeft, Check, X, Shield, Users, Calendar as CalendarIcon, Utensils, Info, MessageCircle } from 'lucide-react';
 import { useAppState } from '../hooks/useAppState';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+// import { ImageWithFallback } from './figma/ImageWithFallback'; // Unused but keeping for reference if needed, commented out
+// import { ImageWithFallback } from './figma/ImageWithFallback';
+// import { ImageWithFallback } from './figma/ImageWithFallback';
 import { cn } from '../utils/cn';
+import { CustomerChatModal } from './messaging/CustomerChatModal';
+import { BentoGridGallery } from './ui-advanced/BentoGridGallery';
 
 export const TripDetailPage: React.FC = () => {
     const { selectedTripId, navigateToCustomerHome, navigateToBookingCheckout, trips } = useAppState();
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [guests, setGuests] = useState({ adults: 1, children: 0 });
     const [sharing, setSharing] = useState<'single' | 'double' | 'triple'>('double');
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const trip = useMemo(() => trips.find(t => t.id === selectedTripId), [selectedTripId, trips]);
 
@@ -54,27 +59,24 @@ export const TripDetailPage: React.FC = () => {
                 {/* Share/Save icons could go here */}
             </nav>
 
-            {/* Hero Section */}
-            <div className="relative h-[50vh] lg:h-[65vh] w-full overflow-hidden">
-                <ImageWithFallback src={trip.image} className="h-full w-full object-cover transition-transform duration-1000 hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                <div className="absolute bottom-0 left-0 w-full p-6 lg:p-12 text-white">
-                    <div className="container mx-auto max-w-7xl">
-                        <div className="flex flex-col gap-2 animate-fade-in-up">
-                            <span className="inline-flex items-center gap-1.5 w-fit rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-md border border-white/10 uppercase tracking-wider">
-                                {trip.type || 'Adventure'}
-                            </span>
-                            <h1 className="text-4xl font-black tracking-tight leading-tight lg:text-7xl drop-shadow-lg">
-                                {trip.title}
-                            </h1>
-                            <div className="flex flex-wrap items-center gap-4 lg:gap-8 mt-2 text-sm lg:text-base font-medium opacity-90">
-                                <span className="flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> {trip.destination}</span>
-                                <span className="flex items-center gap-2"><Clock className="h-5 w-5 text-primary" /> {trip.duration} Days / {trip.duration - 1} Nights</span>
-                                <span className="flex items-center gap-2"><Star className="h-5 w-5 fill-yellow-400 text-yellow-400" /> {trip.rating} ({trip.reviews} reviews)</span>
-                            </div>
+            {/* Hero Section / Gallery */}
+            <div className="relative w-full overflow-hidden bg-neutral-900 pt-20 pb-10 px-4">
+                <div className="container mx-auto max-w-7xl">
+                    <div className="flex flex-col gap-2 animate-fade-in-up mb-8 text-white">
+                        <span className="inline-flex items-center gap-1.5 w-fit rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-md border border-white/10 uppercase tracking-wider">
+                            {trip.type || 'Adventure'}
+                        </span>
+                        <h1 className="text-4xl font-black tracking-tight leading-tight lg:text-7xl drop-shadow-lg">
+                            {trip.title}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-4 lg:gap-8 mt-2 text-sm lg:text-base font-medium opacity-90">
+                            <span className="flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> {trip.destination}</span>
+                            <span className="flex items-center gap-2"><Clock className="h-5 w-5 text-primary" /> {trip.duration} Days / {trip.duration - 1} Nights</span>
+                            <span className="flex items-center gap-2"><Star className="h-5 w-5 fill-yellow-400 text-yellow-400" /> {trip.rating} ({trip.reviews} reviews)</span>
                         </div>
                     </div>
+
+                    <BentoGridGallery images={trip.images} className="shadow-2xl shadow-black/50" />
                 </div>
             </div>
 
@@ -113,7 +115,7 @@ export const TripDetailPage: React.FC = () => {
                                 <span className="text-sm font-normal text-muted-foreground bg-gray-100 px-2 py-1 rounded-full">Day by Day</span>
                             </h2>
                             <div className="relative border-l-2 border-primary/20 ml-3 space-y-8 pl-8 pb-4">
-                                {trip.itinerary.map((day, index) => (
+                                {trip.itinerary.map((day, _index) => (
                                     <div key={day.day} className="relative group">
                                         <div className="absolute -left-[41px] top-0 flex h-8 w-8 items-center justify-center rounded-full bg-white border-2 border-primary shadow-sm group-hover:scale-110 transition-transform">
                                             <span className="text-xs font-bold text-primary">{day.day}</span>
@@ -243,14 +245,23 @@ export const TripDetailPage: React.FC = () => {
                                         <span className="text-primary">₹{calculateTotal().toLocaleString()}</span>
                                     </div>
 
-                                    <button
-                                        onClick={handleBook}
-                                        className="w-full group relative overflow-hidden rounded-xl bg-gray-900 py-4 font-bold text-white shadow-lg transition-all hover:bg-black active:scale-[0.98]"
-                                    >
-                                        <span className="relative z-10 flex items-center justify-center gap-2">
-                                            Proceed to Book <ArrowLeft className="h-4 w-4 rotate-180 transition-transform group-hover:translate-x-1" />
-                                        </span>
-                                    </button>
+                                    <div className="flex flex-col gap-3">
+                                        <button
+                                            onClick={handleBook}
+                                            className="w-full group relative overflow-hidden rounded-xl bg-gray-900 py-4 font-bold text-white shadow-lg transition-all hover:bg-black active:scale-[0.98]"
+                                        >
+                                            <span className="relative z-10 flex items-center justify-center gap-2">
+                                                Proceed to Book <ArrowLeft className="h-4 w-4 rotate-180 transition-transform group-hover:translate-x-1" />
+                                            </span>
+                                        </button>
+                                        <button
+                                            onClick={() => setIsChatOpen(true)}
+                                            className="w-full py-3 font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex items-center justify-center gap-2"
+                                        >
+                                            <MessageCircle className="h-4 w-4" />
+                                            Contact Agency
+                                        </button>
+                                    </div>
 
                                     <p className="text-center text-xs text-gray-400">No payment required today.</p>
                                 </div>
@@ -269,6 +280,14 @@ export const TripDetailPage: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                <CustomerChatModal
+                    isOpen={isChatOpen}
+                    onClose={() => setIsChatOpen(false)}
+                    tripId={trip.id}
+                    tripTitle={trip.title}
+                    vendorId={trip.vendorId || 'v1'}
+                    vendorName={trips.find(t => t.id === trip.id)?.vendorId ? 'Agency' : 'Travelzy Partner'}
+                />
             </div>
         </div>
     );

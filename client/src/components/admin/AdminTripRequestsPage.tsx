@@ -6,11 +6,11 @@ import { Badge } from '../ui/badge';
 import { CheckCircle, XCircle, Eye, Calendar, MapPin, DollarSign } from 'lucide-react';
 import { AdminSidebar } from './AdminSidebar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../ui/dialog";
-import { Card, CardContent } from '../ui/card';
+// import { Card, CardContent } from '../ui/card';
 import { toast } from 'sonner';
 
 export const AdminTripRequestsPage: React.FC = () => {
-    const { trips, addTrip, deleteTrip } = useAppState(); // In a real app we would have updateTripStatus
+    const { trips } = useAppState(); // In a real app we would have updateTripStatus
     const [selectedTrip, setSelectedTrip] = useState<any | null>(null);
 
     // Filter only Pending trips (For mock data, we'll assume some are pending or just show all for demo)
@@ -23,7 +23,7 @@ export const AdminTripRequestsPage: React.FC = () => {
     const pendingTrips = trips.filter(t => t.status === 'PENDING');
     const displayTrips = pendingTrips.length > 0 ? pendingTrips : trips;
 
-    const handleAction = (tripId: string, action: 'APPROVE' | 'REJECT') => {
+    const handleAction = (_tripId: string, action: 'APPROVE' | 'REJECT') => {
         // Here we would call an API updateTripStatus(tripId, action)
         toast.success(`Trip ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`);
         // Simulate removing from list
@@ -107,7 +107,7 @@ export const AdminTripRequestsPage: React.FC = () => {
                     {selectedTrip && (
                         <div className="grid gap-6 py-4">
                             <div className="grid grid-cols-2 gap-4">
-                                <img src={selectedTrip.image} alt="Trip" className="rounded-lg object-cover w-full h-48" />
+                                <img src={selectedTrip.images[0]} alt="Trip" className="rounded-lg object-cover w-full h-48" />
                                 <div className="space-y-2">
                                     <h3 className="font-bold text-xl">{selectedTrip.title}</h3>
                                     <div className="flex items-center text-muted-foreground">

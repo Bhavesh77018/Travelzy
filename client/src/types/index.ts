@@ -4,7 +4,7 @@ export interface Trip {
     destination: string;
     duration: number; // days
     price: number;
-    image: string;
+    images: string[];
     description: string;
     type: 'adventure' | 'leisure' | 'family' | 'romantic' | 'spiritual';
     category?: string;
@@ -14,6 +14,7 @@ export interface Trip {
     inclusions: string[];
     exclusions: string[];
     dates: string[];
+    vendorId: string; // Added for messaging context
     pricing?: { // Made optional for backward compatibility
         single: number;
         double: number;
@@ -21,6 +22,7 @@ export interface Trip {
         quad: number;
     };
     status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    isPromoted?: boolean;
 }
 
 export interface ItineraryDay {
@@ -82,6 +84,7 @@ export type AppView =
     | 'VENDOR_PROFILE'
     | 'VENDOR_TUTORIAL'
     | 'VENDOR_SUPPORT'
+    | 'VENDOR_MESSAGES'
     | 'ADMIN_LOGIN'  // New Separate Login
     | 'ADMIN_DASHBOARD'
     | 'ADMIN_VENDORS'
@@ -90,7 +93,8 @@ export type AppView =
     | 'DESTINATIONS'
     | 'DEALS'
     | 'ABOUT'
-    | 'SUPPORT';
+    | 'SUPPORT'
+    | 'SEARCH_RESULTS';
 
 export interface SupportTicket {
     id: string;
@@ -98,6 +102,29 @@ export interface SupportTicket {
     subject: string;
     status: 'OPEN' | 'RESOLVED';
     messages: { sender: 'user' | 'admin', text: string, timestamp: string }[];
+}
+
+export interface Message {
+    id: string;
+    senderId: string;
+    receiverId: string;
+    senderRole: 'customer' | 'vendor';
+    text: string;
+    timestamp: string;
+    tripId?: string;
+}
+
+export interface Conversation {
+    id: string;
+    vendorId: string;
+    vendorName: string;
+    customerId: string;
+    customerName: string;
+    tripId?: string;
+    tripTitle?: string;
+    lastMessage: string;
+    lastMessageTimestamp: string;
+    unreadCount: number;
 }
 
 export interface VendorProfile extends VendorUser {
@@ -132,6 +159,9 @@ export interface AppState {
     bookings: Booking[];
     tickets: SupportTicket[];
     vendors: VendorProfile[];
+    // Messaging State
+    messages: Message[];
+    conversations: Conversation[];
 }
 
 export interface Booking {

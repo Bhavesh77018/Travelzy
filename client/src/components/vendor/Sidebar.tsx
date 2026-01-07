@@ -11,7 +11,8 @@ import {
     HelpCircle,
     LogOut,
     GraduationCap,
-    Megaphone
+    Megaphone,
+    MessageCircle
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -27,6 +28,8 @@ export const Sidebar: React.FC = () => {
         navigateToVendorProfile,
         navigateToVendorSupport,
         navigateToVendorTutorial,
+
+        navigateToVendorMessages,
         navigateToCustomerHome
     } = useAppState();
 
@@ -55,6 +58,7 @@ export const Sidebar: React.FC = () => {
             <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1">
                 <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2 mt-4">Overview</div>
                 <NavItem label="Dashboard" icon={LayoutDashboard} onClick={navigateToVendorDashboard} active={view === 'VENDOR_DASHBOARD'} />
+                <NavItem label="Messages" icon={MessageCircle} onClick={navigateToVendorMessages} active={view === 'VENDOR_MESSAGES'} />
                 <NavItem label="My Trips" icon={Plane} onClick={navigateToVendorTrips} active={view === 'VENDOR_TRIPS' || view === 'VENDOR_ADD_TRIP'} />
                 <NavItem label="Bookings" icon={CalendarCheck} onClick={navigateToVendorBookings} active={view === 'VENDOR_BOOKINGS'} />
 

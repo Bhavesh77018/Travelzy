@@ -2,15 +2,16 @@ import React from 'react';
 import { Sidebar } from './vendor/Sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Calendar, DollarSign, Users, Activity } from 'lucide-react';
+import { Calendar, DollarSign, Users, Activity, MessageCircle, ArrowRight } from 'lucide-react';
 import { useAppState } from '../hooks/useAppState';
 
 export const DashboardOverview: React.FC = () => {
-    const { bookings, trips } = useAppState();
+    const { bookings, trips, navigateToVendorMessages } = useAppState();
 
     const totalRevenue = bookings.filter(b => b.status === 'CONFIRMED').reduce((acc, curr) => acc + curr.total, 0);
     const totalBookings = bookings.length;
     const activeTrips = trips.length;
+    const unreadMessages = 3; // Placeholder for now, can derive from state later
 
     return (
         <div className="min-h-screen bg-gray-50/50">
@@ -64,6 +65,22 @@ export const DashboardOverview: React.FC = () => {
                                 <p className="text-xs text-gray-400 mt-1">Based on 128 reviews</p>
                             </CardContent>
                         </Card>
+                    </div>
+
+                    {/* Messages Banner */}
+                    <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-6 text-white shadow-lg flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm">
+                                <MessageCircle className="h-6 w-6 text-white" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold">You have {unreadMessages} new inquiries</h3>
+                                <p className="text-blue-100 text-sm">Potential revenue: ₹1,50,000</p>
+                            </div>
+                        </div>
+                        <Button onClick={navigateToVendorMessages} className="bg-white text-blue-600 hover:bg-blue-50 border-0 font-bold">
+                            View Messages <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
                     </div>
 
                     {/* Chart Section Placeholder */}

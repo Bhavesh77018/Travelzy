@@ -44,7 +44,7 @@ export const BookingConfirmation: React.FC = () => {
                     <div className="space-y-4">
                         <div className="flex items-start gap-4">
                             <img
-                                src={trip.image}
+                                src={trip.images[0]}
                                 alt={trip.title}
                                 className="h-20 w-20 rounded-lg object-cover"
                             />

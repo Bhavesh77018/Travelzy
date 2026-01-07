@@ -7,7 +7,7 @@ export const TRIPS: Trip[] = [
         destination: 'Ladakh, India',
         duration: 7,
         price: 24999,
-        image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+        images: ['https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80'],
         description: 'Experience the breathtaking landscapes of Ladakh.',
         type: 'adventure',
         rating: 4.8,
@@ -19,6 +19,8 @@ export const TRIPS: Trip[] = [
         ],
         inclusions: ['Accommodation', 'Breakfast', 'Inner Line Permits'],
         exclusions: ['Airfare', 'Lunch & Dinner'],
+        vendorId: 'v1',
+        status: 'APPROVED',
         dates: ['2024-06-15', '2024-07-01']
     },
     {
@@ -27,7 +29,7 @@ export const TRIPS: Trip[] = [
         destination: 'Goa, India',
         duration: 4,
         price: 12999,
-        image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80',
+        images: ['https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80'],
         description: 'Relax on the pristine beaches of Goa.',
         type: 'leisure',
         rating: 4.5,
@@ -35,6 +37,8 @@ export const TRIPS: Trip[] = [
         itinerary: [],
         inclusions: [],
         exclusions: [],
+        vendorId: 'v1',
+        status: 'APPROVED',
         dates: []
     },
     {
@@ -43,7 +47,7 @@ export const TRIPS: Trip[] = [
         destination: 'Kerala, India',
         duration: 5,
         price: 18999,
-        image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800&q=80',
+        images: ['https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800&q=80'],
         description: 'Houseboat stay and nature walks.',
         type: 'romantic',
         rating: 4.9,
@@ -51,6 +55,8 @@ export const TRIPS: Trip[] = [
         itinerary: [],
         inclusions: [],
         exclusions: [],
+        vendorId: 'v1',
+        status: 'APPROVED',
         dates: []
     },
     // Add more mock trips as needed

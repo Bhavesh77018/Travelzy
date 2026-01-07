@@ -5,7 +5,7 @@ import { Input } from './ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from './ui/card';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Check, ArrowRight, Upload, Building2, User } from 'lucide-react';
+import { Check, ArrowRight, Upload, Building2, User, ShieldCheck } from 'lucide-react';
 
 export const VendorOnboarding: React.FC = () => {
     const { navigateToVendorDashboard } = useAppState();

@@ -121,7 +121,7 @@ export const AddTripForm: React.FC = () => {
             price: parseInt(pricing.double), // Base price on double sharing
             type: (formData.type as any) || 'leisure',
             description: formData.description,
-            image: formData.image || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80',
+            images: [formData.image], // Convert single input to array for model compatibility
             rating: 0,
             reviews: 0,
             itinerary: itinerary.map(day => ({

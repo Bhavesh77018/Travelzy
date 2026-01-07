@@ -25,6 +25,9 @@ import { ChatSupportPage } from './components/support/ChatSupportPage';
 import { VendorLoginPage } from './components/auth/VendorLoginPage';
 import { VendorSignupPage } from './components/auth/VendorSignupPage';
 import { AiTravelAssistant } from './components/AiTravelAssistant';
+import { AiTravelAssistant } from './components/AiTravelAssistant';
+import { VendorMessagesPage } from './components/messaging/VendorMessagesPage';
+import { SearchResultsPage } from './components/SearchResultsPage';
 
 
 const App: React.FC = () => {
@@ -34,6 +37,8 @@ const App: React.FC = () => {
     switch (view) {
       case 'CUSTOMER_HOME':
         return <CustomerHomePage />;
+      case 'SEARCH_RESULTS':
+        return <SearchResultsPage />;
       case 'TRIP_DETAIL':
         return <TripDetailPage />;
       case 'BOOKING_CHECKOUT':
@@ -70,8 +75,9 @@ const App: React.FC = () => {
         return <VendorLoginPage />;
       case 'VENDOR_SIGNUP':
         return <VendorSignupPage />;
-      case 'VENDOR_SIGNUP':
-        return <VendorSignupPage />;
+      case 'VENDOR_MESSAGES':
+        return <VendorMessagesPage />;
+
       // Admin routes removed from Client App
       case 'DESTINATIONS':
         return <DestinationsPage />;
