@@ -34,6 +34,11 @@ app.get('/', (req, res) => {
 // Error Handler
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+// Only listen if not running in Vercel (Vercel exports the app)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`[server]: Server is running at http://localhost:${port}`);
+    });
+}
+
+export default app;
