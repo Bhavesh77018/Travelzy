@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Search, Star, Heart } from 'lucide-react';
-import type { Trip } from '../types';
 import { useAppState } from '../hooks/useAppState';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
