@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppState } from '../../hooks/useAppState';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
@@ -15,7 +15,7 @@ export const AdminVendorDetailPage: React.FC = () => {
         navigateToAdminVendors
     } = useAppState();
 
-    const vendor = vendors.find(v => v.id === selectedDetailId);
+    const vendor = vendors.find((v: any) => v.id === selectedDetailId);
 
     if (!vendor) {
         return <div>Vendor not found</div>;
@@ -92,7 +92,7 @@ export const AdminVendorDetailPage: React.FC = () => {
                                 <CardContent>
                                     {vendor.documents && vendor.documents.length > 0 ? (
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {vendor.documents.map((doc, idx) => (
+                                            {vendor.documents.map((doc: any, idx: number) => (
                                                 <div key={idx} className="border rounded-lg p-4 space-y-2">
                                                     <div className="flex items-center justify-between">
                                                         <span className="font-medium capitalize">{doc.type}</span>

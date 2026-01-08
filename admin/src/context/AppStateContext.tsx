@@ -5,7 +5,7 @@ import type { AppState, AppView, CustomerUser, VendorUser, VendorTab, BookingDat
 import { MOCK_TRIPS, MOCK_BOOKINGS, MOCK_VENDORS, MOCK_TICKETS } from '../data/mockData';
 
 
-interface AppContextType {
+export interface AppContextType {
     view: AppView;
     activeVendorTab: VendorTab;
     customerUser: CustomerUser | null;
@@ -201,7 +201,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const navigateToHome = () => navigateTo('CUSTOMER_HOME');
     const navigateToCustomerHome = () => navigateTo('CUSTOMER_HOME');
-    const navigateToCustomerLogin = () => navigateTo('CUSTOMER_LOGIN');
+
     const navigateToTripDetailOld = (tripId: string) => {
         setSelectedTripId(tripId);
         navigateTo('TRIP_DETAIL');

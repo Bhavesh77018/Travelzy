@@ -19,7 +19,8 @@ export const TRIPS: Trip[] = [
         ],
         inclusions: ['Accommodation', 'Breakfast', 'Inner Line Permits'],
         exclusions: ['Airfare', 'Lunch & Dinner'],
-        dates: ['2024-06-15', '2024-07-01']
+        dates: ['2024-06-15', '2024-07-01'],
+        status: 'APPROVED'
     },
     {
         id: 't2',
@@ -35,7 +36,8 @@ export const TRIPS: Trip[] = [
         itinerary: [],
         inclusions: [],
         exclusions: [],
-        dates: []
+        dates: [],
+        status: 'APPROVED'
     },
     {
         id: 't3',
@@ -51,7 +53,8 @@ export const TRIPS: Trip[] = [
         itinerary: [],
         inclusions: [],
         exclusions: [],
-        dates: []
+        dates: [],
+        status: 'APPROVED'
     },
     // Add more mock trips as needed
 ];
