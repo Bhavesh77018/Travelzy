@@ -33,7 +33,7 @@ export const AdminTripDetailPage: React.FC = () => {
     };
 
     const handleReject = () => {
-        rejectTrip(trip.id);
+        rejectTrip(trip.id, "Rejected by Admin Action");
         toast.error(`Trip "${trip.title}" has been rejected.`);
     };
 
