@@ -21,7 +21,7 @@ export interface Trip {
         triple: number;
         quad: number;
     };
-    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    status?: 'PENDING' | 'APPROVED' | 'REJECTED';
     isPromoted?: boolean;
 }
 

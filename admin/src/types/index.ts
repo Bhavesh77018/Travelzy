@@ -20,7 +20,7 @@ export interface Trip {
         triple: number;
         quad: number;
     };
-    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    status?: 'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
 export interface ItineraryDay {

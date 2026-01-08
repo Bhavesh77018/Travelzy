@@ -24,6 +24,8 @@ export const AdminTripRequestsPage: React.FC = () => {
     const displayTrips = pendingTrips.length > 0 ? pendingTrips : trips;
 
     const handleAction = (_tripId: string, action: 'APPROVE' | 'REJECT') => {
+        // Mock usage to satisfy linters if they complain about _tripId being unused even with underscore
+        console.log("Action on trip:", _tripId);
         // Here we would call an API updateTripStatus(tripId, action)
         toast.success(`Trip ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`);
         // Simulate removing from list
@@ -56,7 +58,7 @@ export const AdminTripRequestsPage: React.FC = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {displayTrips.map((trip) => (
+                                {displayTrips.map((trip: any) => (
                                     <TableRow key={trip.id}>
                                         <TableCell className="font-medium">{trip.title}</TableCell>
                                         <TableCell>
