@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Search } from 'lucide-react';
-import { Trip } from '../types';
+import { MapPin, Search, Star, Heart } from 'lucide-react';
+import type { Trip } from '../types';
 import { useAppState } from '../hooks/useAppState';
-import { TripCard } from './ui-advanced/TripCard';
+import { Card } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { LazyImage } from './ui-advanced/LazyImage';
 
 export function SearchResultsPage() {
     const location = useLocation();
@@ -64,14 +67,64 @@ export function SearchResultsPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                             >
-                                <div className="relative">
-                                    <TripCard
-                                        trip={trip}
-                                        onClick={() => navigateToTripDetail(trip.id)}
-                                    />
+                                <div className="relative group cursor-pointer" onClick={() => navigateToTripDetail(trip.id)}>
+                                    <Card className="border-0 shadow-lg overflow-hidden rounded-[2rem] bg-white h-full hover:-translate-y-1 transition-all duration-300">
+                                        {/* Image Area */}
+                                        <div className="relative h-64 overflow-hidden">
+                                            <LazyImage
+                                                src={trip.images?.[0] || ''}
+                                                alt={trip.title}
+                                                className="h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+
+                                            <div className="absolute top-4 right-4 z-10">
+                                                <div className="p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white/40 transition-colors">
+                                                    <Heart className="h-5 w-5 text-white" />
+                                                </div>
+                                            </div>
+
+                                            <div className="absolute bottom-4 left-4 right-4 text-white">
+                                                <Badge className="bg-cyan-500/90 backdrop-blur-md border-0 mb-2">
+                                                    {trip.duration} Days
+                                                </Badge>
+                                                <h3 className="font-bold text-xl leading-tight line-clamp-1">{trip.title}</h3>
+                                                <div className="flex items-center gap-1 text-sm text-slate-200 mt-1">
+                                                    <MapPin className="h-3.5 w-3.5" />
+                                                    {trip.destination}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Content Area */}
+                                        <div className="p-5">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <Badge variant="secondary" className="bg-slate-100 text-slate-600">
+                                                    {trip.category || 'Experience'}
+                                                </Badge>
+                                                <div className="flex items-center gap-1 text-amber-500 font-bold text-sm">
+                                                    <Star className="h-4 w-4 fill-current" />
+                                                    {trip.rating}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs text-slate-400 font-bold uppercase">Starts from</span>
+                                                    <span className="text-xl font-black text-slate-800">
+                                                        ₹{trip.price.toLocaleString()}
+                                                    </span>
+                                                </div>
+                                                <Button size="sm" className="rounded-full bg-slate-900 text-white group-hover:bg-cyan-600 transition-colors">
+                                                    View Details
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </Card>
+
                                     {/* Promoted Badge Overlay */}
                                     {trip.isPromoted && (
-                                        <div className="absolute -top-3 -right-3 z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/20 animate-pulse">
+                                        <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border border-white/20 animate-pulse">
                                             FEATURED
                                         </div>
                                     )}

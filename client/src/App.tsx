@@ -25,7 +25,6 @@ import { ChatSupportPage } from './components/support/ChatSupportPage';
 import { VendorLoginPage } from './components/auth/VendorLoginPage';
 import { VendorSignupPage } from './components/auth/VendorSignupPage';
 import { AiTravelAssistant } from './components/AiTravelAssistant';
-import { AiTravelAssistant } from './components/AiTravelAssistant';
 import { VendorMessagesPage } from './components/messaging/VendorMessagesPage';
 import { SearchResultsPage } from './components/SearchResultsPage';
 
