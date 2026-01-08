@@ -25,13 +25,13 @@ export const TripDetailPage: React.FC = () => {
 
     const handleBook = () => {
         if (!selectedDate) return alert('Please select a date');
-        navigateToBookingCheckout({
+        navigateToBookingCheckout(trip.id, {
             tripId: trip.id,
             date: selectedDate,
             guests,
             sharing,
             totalPrice: calculateTotal()
-        });
+        } as any);
     };
 
     return (

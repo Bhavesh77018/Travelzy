@@ -75,6 +75,10 @@ export interface AppContextType {
     verifyVendor: (vendorId: string) => void;
     approveTrip: (tripId: string) => void;
     rejectTrip: (tripId: string) => void;
+    addTrip: (trip: any) => void;
+    deleteTrip: (tripId: string) => void;
+    updateBookingStatus: (bookingId: string, status: string) => void;
+    resolveTicket: (ticketId: string) => void;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -265,6 +269,32 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }));
     };
 
+    const addTrip = (trip: any) => {
+        console.log("Add trip", trip);
+        // Mock implementation
+    };
+
+    const deleteTrip = (tripId: string) => {
+        setState(prev => ({
+            ...prev,
+            trips: prev.trips.filter(t => t.id !== tripId)
+        }));
+    };
+
+    const updateBookingStatus = (bookingId: string, status: string) => {
+        setState(prev => ({
+            ...prev,
+            bookings: prev.bookings.map(b => b.id === bookingId ? { ...b, status: status as any } : b)
+        }));
+    };
+
+    const resolveTicket = (ticketId: string) => {
+        setState(prev => ({
+            ...prev,
+            tickets: prev.tickets.map(t => t.id === ticketId ? { ...t, status: 'RESOLVED' } : t)
+        }));
+    };
+
     const value = {
         view: state.view,
         activeVendorTab: state.activeVendorTab,
@@ -332,7 +362,11 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         navigateToSupport,
         verifyVendor,
         approveTrip,
-        rejectTrip
+        rejectTrip,
+        addTrip,
+        deleteTrip,
+        updateBookingStatus,
+        resolveTicket
     };
 
     return (
