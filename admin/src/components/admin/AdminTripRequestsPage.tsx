@@ -10,7 +10,7 @@ import { Card, CardContent } from '../ui/card';
 import { toast } from 'sonner';
 
 export const AdminTripRequestsPage: React.FC = () => {
-    const { trips, addTrip, deleteTrip, navigateToTripDetail } = useAppState(); // In a real app we would have updateTripStatus
+    const { trips, addTrip, navigateToTripDetail } = useAppState(); // In a real app we would have updateTripStatus
     const [selectedTrip, setSelectedTrip] = useState<any | null>(null);
 
     // Filter only Pending trips (For mock data, we'll assume some are pending or just show all for demo)
