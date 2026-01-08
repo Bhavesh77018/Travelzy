@@ -28,7 +28,7 @@ export const AdminTripDetailPage: React.FC = () => {
     }
 
     const handleApprove = () => {
-        approveTrip(trip.id);
+        approveTrip(trip.id, false);
         toast.success(`Trip "${trip.title}" has been approved.`);
     };
 

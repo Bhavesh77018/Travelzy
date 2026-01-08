@@ -118,7 +118,7 @@ export interface VendorProfile extends VendorUser {
     credits: number;
     status: 'PENDING' | 'VERIFIED' | 'REJECTED';
     verificationNotes?: string;
-    documents?: { type: string, urls: string[] }[];
+    documents?: { type: 'company' | 'individual', urls: string[] }[];
 }
 
 export type VendorTab =

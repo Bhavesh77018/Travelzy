@@ -4,7 +4,6 @@ import { useAppState } from '../../hooks/useAppState';
 import { Button } from '../ui/button';
 import { ShieldCheck, DollarSign, TrendingUp } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { cn } from '../../utils/cn';
 
 export const AdminSidebar: React.FC = () => {
     const {
@@ -128,6 +127,8 @@ export const AdminSidebar: React.FC = () => {
                     icon={DollarSign}
                 />
                 <NavItem
+                    label="Support Tickets"
+                    onClick={navigateToAdminSupport}
                     active={view === 'ADMIN_SUPPORT'}
                     badge={openTickets}
                 />
