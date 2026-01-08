@@ -1,7 +1,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import type { AppState, AppView, CustomerUser, VendorUser, VendorTab, BookingData, Trip, Booking, SupportTicket, VendorProfile, SearchResult } from '../types';
 import { MOCK_TRIPS, MOCK_BOOKINGS, MOCK_VENDORS, MOCK_TICKETS } from '../data/mockData';
+
 
 interface AppContextType {
     view: AppView;
@@ -88,15 +90,37 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         confirmedBookingId: null,
         showCouponLogin: false,
         onboardingCompleted: false,
-        trips: MOCK_TRIPS,
-        bookings: MOCK_BOOKINGS,
-        tickets: MOCK_TICKETS,
-        vendors: MOCK_VENDORS,
+        trips: [], // Start empty, fetch from API
+        bookings: MOCK_BOOKINGS, // Mock for now
+        tickets: MOCK_TICKETS,   // Mock for now
+        vendors: MOCK_VENDORS,   // Mock for now
         // Search & Details Initial State
         searchResults: [],
         searchQuery: '',
         selectedDetailId: null,
     });
+
+    // Fetch Real Data where available
+    useEffect(() => {
+        const fetchAdminData = async () => {
+            try {
+                // Fetch Trips from Backend
+                const tripsRes = await fetch(`${API_BASE_URL}/api/trips`);
+                if (tripsRes.ok) {
+                    const tripsData = await tripsRes.json();
+                    setState(prev => ({ ...prev, trips: tripsData }));
+                } else {
+                    console.error("Failed to fetch trips, using mock fallback");
+                    setState(prev => ({ ...prev, trips: MOCK_TRIPS }));
+                }
+            } catch (error) {
+                console.error("Failed to fetch admin data", error);
+                // Fallback to mocks on error
+                setState(prev => ({ ...prev, trips: MOCK_TRIPS }));
+            }
+        };
+        fetchAdminData();
+    }, []);
 
     const setView = (view: AppView) => setState(prev => ({ ...prev, view }));
     const setActiveVendorTab = (tab: VendorTab) => setState(prev => ({ ...prev, activeVendorTab: tab }));
