@@ -35,7 +35,7 @@ export const AdminVendorsPage: React.FC = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {vendors.map((vendor) => (
+                                {vendors.map((vendor: any) => (
                                     <TableRow key={vendor.id}>
                                         <TableCell className="font-medium">{vendor.businessName}</TableCell>
                                         <TableCell>{vendor.email}</TableCell>

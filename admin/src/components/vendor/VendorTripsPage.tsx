@@ -63,7 +63,7 @@ export const VendorTripsPage: React.FC = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {myTrips.map((trip) => (
+                            {myTrips.map((trip: any) => (
                                 <TableRow key={trip.id}>
                                     <TableCell className="font-medium">{trip.title}</TableCell>
                                     <TableCell>{trip.destination}</TableCell>
