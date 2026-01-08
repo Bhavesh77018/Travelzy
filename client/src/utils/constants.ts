@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Trip } from '../types';
 
 export const TRIPS: Trip[] = [

@@ -11,6 +11,8 @@ import type {
     SupportTicket,
     VendorProfile
 } from '../types';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { TripService } from '../services/TripService';
 // import { AuthService } from '../services/AuthService';
 import { MessageService } from '../services/MessageService';
@@ -219,7 +221,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const verifyVendor = async (vendorId: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/vendors/${vendorId}/verify`, {
+            const response = await fetch(`${API_BASE_URL}/api/vendors/${vendorId}/verify`, {
                 method: 'POST'
             });
 
@@ -236,7 +238,7 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const resolveTicket = async (ticketId: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/tickets/${ticketId}/resolve`, {
+            const response = await fetch(`${API_BASE_URL}/api/tickets/${ticketId}/resolve`, {
                 method: 'POST'
             });
 

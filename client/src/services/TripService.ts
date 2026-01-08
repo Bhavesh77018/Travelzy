@@ -1,38 +1,58 @@
 
 import type { Trip } from '../types';
-import { MOCK_TRIPS } from '../data/mockData';
+// import { MOCK_TRIPS } from '../data/mockData';
 
-// Simulate network delay
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+import { API_BASE_URL } from '../config';
 
 class TripServiceName {
-    private trips: Trip[] = [...MOCK_TRIPS];
-
     async getAllTrips(): Promise<Trip[]> {
-        await delay(500); // Simulate network latency
-        return [...this.trips];
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/trips`);
+            if (!response.ok) throw new Error('Failed to fetch trips');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching trips:', error);
+            return [];
+        }
     }
 
     async getTripById(id: string): Promise<Trip | undefined> {
-        await delay(300);
-        return this.trips.find(t => t.id === id);
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/trips/${id}`);
+            if (!response.ok) return undefined;
+            return await response.json();
+        } catch (error) {
+            console.error(`Error fetching trip ${id}:`, error);
+            return undefined;
+        }
     }
 
     async createTrip(trip: Trip): Promise<Trip> {
-        await delay(800);
-        this.trips.push(trip);
-        return trip;
+        const response = await fetch(`${API_BASE_URL}/api/trips`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(trip)
+        });
+        if (!response.ok) throw new Error('Failed to create trip');
+        return await response.json();
     }
 
     async updateTrip(updatedTrip: Trip): Promise<Trip> {
-        await delay(600);
-        this.trips = this.trips.map(t => t.id === updatedTrip.id ? updatedTrip : t);
-        return updatedTrip;
+        const response = await fetch(`${API_BASE_URL}/api/trips/${updatedTrip.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedTrip)
+        });
+        if (!response.ok) throw new Error('Failed to update trip');
+        return await response.json();
     }
 
     async deleteTrip(tripId: string): Promise<void> {
-        await delay(400);
-        this.trips = this.trips.filter(t => t.id !== tripId);
+        await fetch(`${API_BASE_URL}/api/trips/${tripId}`, {
+            method: 'DELETE'
+        });
     }
 }
 

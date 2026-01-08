@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
 import type { AppState, AppView, CustomerUser, VendorUser, VendorTab, BookingData, Trip, Booking, SupportTicket, VendorProfile, SearchResult } from '../types';

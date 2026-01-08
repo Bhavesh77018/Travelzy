@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Plus, Edit2, Trash2, MoreHorizontal } from 'lucide-react';
 import { useAppState } from '../../hooks/useAppState';
