@@ -48,7 +48,7 @@ export const VendorBookingsPage: React.FC = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {bookings.map((booking) => (
+                            {bookings.map((booking: any) => (
                                 <TableRow key={booking.id}>
                                     <TableCell className="font-mono text-xs">{booking.id}</TableCell>
                                     <TableCell className="font-medium">{booking.trip}</TableCell>
