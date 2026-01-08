@@ -5,26 +5,54 @@ import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { ShieldCheck, Lock, Mail, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+// Reuse the client AuthService or create an admin specific one. Client one works if URL is same.
+// But we need to import it. Since this is admin repo, we need to check if we have access to shared validation or just copy logic.
+// For now, let's implement the fetch call directly here or create AdminAuthService if better structure needed.
+import { API_BASE_URL } from '../../config';
 
 export const AdminLoginPage: React.FC = () => {
     const { navigateToAdminDashboard } = useAppState();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Simple hardcoded check for demonstration
-        setTimeout(() => {
-            if (formData.email === 'admin@travelzy.com' && formData.password === 'admin123') {
-                toast.success("Welcome back, Admin!");
-                navigateToAdminDashboard();
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Check if user is admin
+                if (data.role === 'admin') {
+                    // Store token? The AppState context usually handles user, but for now lets rely on simple navigation
+                    // Ideally we should setToken(data.token) in context.
+                    // Let's assume for this MVP we just navigate and maybe store in localStorage if we implemented fetch wrappers.
+                    // Detailed Auth implementation would involve updating Context to hold Token.
+
+                    // Simple hack for now: Store in localStorage so services can pick it up
+                    localStorage.setItem('adminToken', data.token);
+
+                    toast.success("Welcome back, Admin!");
+                    navigateToAdminDashboard();
+                } else {
+                    toast.error("Access Denied: You are not an administrator.");
+                }
             } else {
-                toast.error("Invalid credentials. Try admin@travelzy.com / admin123");
-                setIsLoading(false);
+                toast.error(data.message || "Login failed");
             }
-        }, 1000);
+        } catch (error) {
+            console.error("Login Error:", error);
+            toast.error("Failed to connect to server. Ensure backend is running.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
