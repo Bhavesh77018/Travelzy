@@ -21,9 +21,14 @@ const vendorProfileSchema = new mongoose.Schema({
         default: 'PENDING'
     },
     documents: [{
-        type: String, // URLs to uploaded docs
-        name: String
+        type: {
+            type: String,
+            enum: ['company', 'individual', 'cheque'],
+            required: true
+        },
+        urls: [String]
     }],
+    verificationNotes: String,
     revenue: {
         type: Number,
         default: 0

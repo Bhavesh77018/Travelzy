@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes';
 import tripRoutes from './routes/tripRoutes';
 import bookingRoutes from './routes/bookingRoutes';
 import vendorRoutes from './routes/vendorRoutes';
+import marketingRoutes from './routes/marketingRoutes';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/vendors', vendorRoutes);
+app.use('/api/marketing', marketingRoutes);
 
 app.get('/', (req, res) => {
     res.send('Travelzy API is running with MongoDB!');

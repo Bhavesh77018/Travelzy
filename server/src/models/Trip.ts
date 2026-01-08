@@ -65,7 +65,8 @@ const tripSchema = new mongoose.Schema({
     isPromoted: {
         type: Boolean,
         default: false
-    }
+    },
+    adminComments: String
 }, {
     timestamps: true
 });

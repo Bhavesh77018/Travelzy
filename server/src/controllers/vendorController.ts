@@ -47,7 +47,7 @@ export const getVendorStats = async (req: Request, res: Response) => {
 export const updateVendorProfile = async (req: Request, res: Response) => {
     try {
         const vendorId = (req as any).user._id;
-        const { businessName, description, address, website } = req.body;
+        const { businessName, description, address, website, documents } = req.body;
 
         const profile = await VendorProfile.findOne({ userId: vendorId });
 
@@ -56,6 +56,7 @@ export const updateVendorProfile = async (req: Request, res: Response) => {
             profile.description = description || profile.description;
             profile.address = address || profile.address;
             profile.website = website || profile.website;
+            if (documents) profile.documents = documents; // Update documents if provided
 
             const updatedProfile = await profile.save();
             res.json(updatedProfile);
@@ -66,9 +67,54 @@ export const updateVendorProfile = async (req: Request, res: Response) => {
                 businessName,
                 description,
                 address,
-                website
+                website,
+                documents: documents || []
             });
             res.status(201).json(newProfile);
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+};
+
+// @desc    Get all pending vendors (Admin)
+// @route   GET /api/vendors/pending
+// @access  Private (Admin)
+export const getPendingVendors = async (req: Request, res: Response) => {
+    try {
+        const vendors = await VendorProfile.find({ verificationStatus: 'PENDING' });
+        res.json(vendors);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+};
+
+// @desc    Verify or Reject Vendor
+// @route   PUT /api/vendors/:id/verify
+// @access  Private (Admin)
+export const verifyVendor = async (req: Request, res: Response) => {
+    try {
+        const { status, notes } = req.body; // status: 'VERIFIED' | 'REJECTED'
+        const vendor = await VendorProfile.findById(req.params.id);
+
+        if (vendor) {
+            vendor.verificationStatus = status;
+            vendor.verificationNotes = notes;
+            const updatedVendor = await vendor.save();
+
+            // Also update the User role if needed or notify them (simulated)
+            if (status === 'VERIFIED') {
+                // Could verify the User model too if we had a field there, but VendorProfile is enough
+            }
+
+            res.json(updatedVendor);
+        } else {
+            res.status(404);
+            throw new Error('Vendor not found');
         }
     } catch (error) {
         if (error instanceof Error) {

@@ -36,3 +36,12 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         res.json({ message: 'Not authorized, no token' });
     }
 };
+
+export const admin = (req: Request, res: Response, next: NextFunction) => {
+    if ((req as any).user && (req as any).user.role === 'admin') {
+        next();
+    } else {
+        res.status(401);
+        throw new Error('Not authorized as an admin');
+    }
+};

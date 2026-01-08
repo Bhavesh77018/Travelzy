@@ -2,7 +2,8 @@
 import React from 'react';
 import { useAppState } from '../../hooks/useAppState';
 import { Button } from '../ui/button';
-import { ShieldCheck, DollarSign } from 'lucide-react';
+import { ShieldCheck, DollarSign, TrendingUp } from 'lucide-react';
+import { cn } from '../../utils/cn';
 import { cn } from '../../utils/cn';
 
 export const AdminSidebar: React.FC = () => {
@@ -15,6 +16,7 @@ export const AdminSidebar: React.FC = () => {
         navigateToAdminTrips,
         navigateToAdminPayouts,
         navigateToAdminSupport,
+        navigateToAdminMarketing,
         navigateToCustomerHome,
         // Search
         searchQuery,
@@ -126,10 +128,14 @@ export const AdminSidebar: React.FC = () => {
                     icon={DollarSign}
                 />
                 <NavItem
-                    label="Support Tickets"
-                    onClick={navigateToAdminSupport}
                     active={view === 'ADMIN_SUPPORT'}
                     badge={openTickets}
+                />
+                <NavItem
+                    label="Marketing Tools"
+                    onClick={navigateToAdminMarketing}
+                    active={view === 'ADMIN_MARKETING'}
+                    icon={TrendingUp}
                 />
             </nav>
         </div>

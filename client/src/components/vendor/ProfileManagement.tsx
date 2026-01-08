@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { useAppState } from '../../hooks/useAppState';
+import { VendorService } from '../../services/VendorService';
+import { toast } from 'sonner';
 
 export const ProfileManagement: React.FC = () => {
-    const { vendorUser } = useAppState();
+    const { vendorUser, token, setVendorUser } = useAppState();
+    const [loading, setLoading] = useState(false);
+
+    // Form state
+    const [formData, setFormData] = useState({
+        businessName: vendorUser?.businessName || '',
+        email: vendorUser?.email || '',
+        description: vendorUser?.description || '',
+        website: vendorUser?.website || '',
+        phone: vendorUser?.phone || '',
+        address: vendorUser?.address || ''
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const updated = await VendorService.updateProfile(token!, formData);
+            setVendorUser({ ...vendorUser, ...updated }); // Update context
+            toast.success('Profile updated successfully!');
+        } catch (error) {
+            toast.error('Failed to update profile');
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50/50">
@@ -27,29 +58,39 @@ export const ProfileManagement: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Agency Name</label>
-                                    <Input defaultValue={vendorUser?.businessName || "My Agency"} />
+                                    <Input name="businessName" value={formData.businessName} onChange={handleChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Contact Email</label>
-                                    <Input defaultValue={vendorUser?.email || "email@agency.com"} />
+                                    <Input name="email" value={formData.email} onChange={handleChange} disabled />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Bio / Description</label>
-                                <textarea className="w-full min-h-[100px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                    defaultValue="We are a premium travel agency specializing in Himalayan adventures." />
+                                <textarea
+                                    name="description"
+                                    className="w-full min-h-[100px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Website</label>
-                                    <Input placeholder="https://" />
+                                    <Input name="website" value={formData.website} onChange={handleChange} placeholder="https://" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Phone</label>
-                                    <Input placeholder="+91" />
+                                    <Input name="phone" value={formData.phone} onChange={handleChange} placeholder="+91" />
+                                </div>
+                                <div className="space-y-2 col-span-2">
+                                    <label className="text-sm font-medium">Address</label>
+                                    <Input name="address" value={formData.address} onChange={handleChange} />
                                 </div>
                             </div>
-                            <Button>Save Changes</Button>
+                            <Button onClick={handleSubmit} disabled={loading}>
+                                {loading ? 'Saving...' : 'Save Changes'}
+                            </Button>
                         </CardContent>
                     </Card>
                 </main>

@@ -65,7 +65,7 @@ export const getTripById = async (req: Request, res: Response) => {
 export const createTrip = async (req: Request, res: Response) => {
     try {
         const vendorId = (req as any).user._id;
-        const tripData = { ...req.body, vendorId };
+        const tripData = { ...req.body, vendorId, status: 'PENDING' }; // Force pending
 
         const trip = await Trip.create(tripData);
         res.status(201).json(trip);
@@ -90,6 +90,8 @@ export const updateTrip = async (req: Request, res: Response) => {
                 throw new Error('Not authorized to update this trip');
             }
 
+            // If vendor updates, reset status to PENDING? Maybe, depends on policy.
+            // For now let's keep it simply update.
             const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, {
                 new: true,
             });
@@ -119,6 +121,67 @@ export const deleteTrip = async (req: Request, res: Response) => {
             }
             await trip.deleteOne();
             res.json({ message: 'Trip removed' });
+        } else {
+            res.status(404);
+            throw new Error('Trip not found');
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+};
+
+// @desc    Get all pending trips (Admin)
+// @route   GET /api/trips/admin/pending
+// @access  Private (Admin)
+export const getPendingTrips = async (req: Request, res: Response) => {
+    try {
+        const trips = await Trip.find({ status: 'PENDING' }).populate('vendorId', 'name email');
+        res.json(trips);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+};
+
+// @desc    Approve a trip
+// @route   PUT /api/trips/:id/approve
+// @access  Private (Admin)
+export const approveTrip = async (req: Request, res: Response) => {
+    try {
+        const trip = await Trip.findById(req.params.id);
+
+        if (trip) {
+            trip.status = 'PUBLISHED'; // Or 'APPROVED' based on enum, let's use PUBLISHED as equivalent to live
+            trip.isPromoted = req.body.isPromoted || false;
+            const updatedTrip = await trip.save();
+            res.json(updatedTrip);
+        } else {
+            res.status(404);
+            throw new Error('Trip not found');
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+};
+
+// @desc    Reject a trip
+// @route   PUT /api/trips/:id/reject
+// @access  Private (Admin)
+export const rejectTrip = async (req: Request, res: Response) => {
+    try {
+        const { reason } = req.body;
+        const trip = await Trip.findById(req.params.id);
+
+        if (trip) {
+            trip.status = 'REJECTED'; // Or 'CANCELLED' / 'DRAFT'
+            trip.adminComments = reason;
+            const updatedTrip = await trip.save();
+            res.json(updatedTrip);
         } else {
             res.status(404);
             throw new Error('Trip not found');

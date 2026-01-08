@@ -9,6 +9,7 @@ import { AdminVendorDetailPage } from './components/admin/AdminVendorDetailPage'
 import { AdminTripDetailPage } from './components/admin/AdminTripDetailPage';
 import { AdminPayoutDetailPage } from './components/admin/AdminPayoutDetailPage';
 import { AdminSupportPage } from './components/admin/AdminSupportPage';
+import { AdminMarketingPage } from './components/admin/AdminMarketingPage';
 
 import { AdminLoginPage } from './components/admin/AdminLoginPage';
 
@@ -36,6 +37,8 @@ const App: React.FC = () => {
         return <AdminPayoutDetailPage />;
       case 'ADMIN_SUPPORT':
         return <AdminSupportPage />;
+      case 'ADMIN_MARKETING':
+        return <AdminMarketingPage />;
       default:
         // Default to login for any other state in the separate Admin Portal
         return <AdminLoginPage />;

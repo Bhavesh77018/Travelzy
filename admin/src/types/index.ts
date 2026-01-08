@@ -21,6 +21,8 @@ export interface Trip {
         quad: number;
     };
     status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+    adminComments?: string;
+    isPromoted?: boolean;
 }
 
 export interface ItineraryDay {
@@ -90,7 +92,9 @@ export type AppView =
     | 'ADMIN_TRIP_DETAIL'
     | 'ADMIN_PAYOUTS'
     | 'ADMIN_PAYOUT_DETAIL'
+    | 'ADMIN_PAYOUT_DETAIL'
     | 'ADMIN_SUPPORT'
+    | 'ADMIN_MARKETING'
     | 'DESTINATIONS'
     | 'DEALS'
     | 'ABOUT'
@@ -113,6 +117,8 @@ export interface VendorProfile extends VendorUser {
     joinedDate: string;
     credits: number;
     status: 'PENDING' | 'VERIFIED' | 'REJECTED';
+    verificationNotes?: string;
+    documents?: { type: string, urls: string[] }[];
 }
 
 export type VendorTab =
