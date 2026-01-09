@@ -2,13 +2,6 @@ import React from 'react';
 import { Sidebar } from './Sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Download } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"; // Corrected import path
-
-import React from 'react';
-import { Sidebar } from './Sidebar';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
 import { Download, TrendingUp, Wallet, ArrowUpRight, DollarSign, Calendar } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Badge } from '../ui/badge';
@@ -138,7 +131,3 @@ export const FinancialManagement: React.FC = () => {
         </div>
     );
 };
-
-function TrendingUp({ className }: { className?: string }) {
-    return <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
-}

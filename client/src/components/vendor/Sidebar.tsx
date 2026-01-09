@@ -12,24 +12,6 @@ import {
     LogOut,
     GraduationCap,
     Megaphone,
-    MessageCircle
-} from 'lucide-react';
-import { cn } from '../../utils/cn';
-
-import React from 'react';
-import { useAppState } from '../../hooks/useAppState';
-import { Button } from '../ui/button';
-import {
-    LayoutDashboard,
-    Plane,
-    CalendarCheck,
-    Wallet,
-    Users,
-    Settings,
-    HelpCircle,
-    LogOut,
-    GraduationCap,
-    Megaphone,
     MessageCircle,
     ChevronRight
 } from 'lucide-react';

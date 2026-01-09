@@ -10,20 +10,6 @@ import {
     TableRow,
 } from "../ui/table";
 import { Badge } from '../ui/badge';
-import { Calendar, User, CheckCircle, XCircle } from 'lucide-react';
-
-import React from 'react';
-import { useAppState } from '../../hooks/useAppState';
-import { Button } from '../ui/button';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "../ui/table";
-import { Badge } from '../ui/badge';
 import { Calendar, User, CheckCircle, XCircle, Search, Filter, MoreHorizontal } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 

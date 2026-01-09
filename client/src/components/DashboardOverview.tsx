@@ -2,13 +2,6 @@ import React from 'react';
 import { Sidebar } from './vendor/Sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Calendar, DollarSign, Users, Activity, MessageCircle, ArrowRight } from 'lucide-react';
-import { useAppState } from '../hooks/useAppState';
-
-import React from 'react';
-import { Sidebar } from './vendor/Sidebar';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
 import { Calendar, DollarSign, Users, Activity, MessageCircle, ArrowRight, TrendingUp, Star, ChevronRight } from 'lucide-react';
 import { useAppState } from '../hooks/useAppState';
 

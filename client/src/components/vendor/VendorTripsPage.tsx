@@ -1,27 +1,4 @@
 import React from 'react';
-import { Plus, Edit2, Trash2, MoreHorizontal } from 'lucide-react';
-import { useAppState } from '../../hooks/useAppState';
-import { Button } from '../ui/button';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "../ui/table";
-import { Badge } from '../ui/badge';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Clock } from 'lucide-react';
-
-import React from 'react';
 import { Plus, Edit2, Trash2, MoreHorizontal, MapPin, Clock, Star, Calendar, ArrowUpRight } from 'lucide-react';
 import { useAppState } from '../../hooks/useAppState';
 import { Button } from '../ui/button';
@@ -60,7 +37,7 @@ export const VendorTripsPage: React.FC = () => {
 
                 <div className="absolute top-3 right-3 flex gap-2">
                     <Badge className={`backdrop-blur-md shadow-sm ${trip.status === 'PENDING' ? 'bg-amber-500/90 text-white' :
-                            trip.status === 'REJECTED' ? 'bg-red-500/90 text-white' : 'bg-emerald-500/90 text-white'
+                        trip.status === 'REJECTED' ? 'bg-red-500/90 text-white' : 'bg-emerald-500/90 text-white'
                         }`}>
                         {trip.status === 'PENDING' ? 'Under Review' : trip.status}
                     </Badge>
