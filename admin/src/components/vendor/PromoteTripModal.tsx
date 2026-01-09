@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
 import { API_BASE_URL } from '../../config';
-import { Trip } from '../../types';
+import type { Trip } from '../../types';
 
 interface PromoteTripModalProps {
     open: boolean;
@@ -73,7 +73,7 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
             if (response.ok) {
                 const data = await response.json();
                 // Filter for published trips only
-                const publishedTrips = data.filter((trip: Trip) => trip.status === 'PUBLISHED' || trip.status === 'APPROVED');
+                const publishedTrips = data.filter((trip: Trip) => trip.status === 'APPROVED');
                 setTrips(publishedTrips);
                 if (publishedTrips.length > 0) {
                     setSelectedTripId(publishedTrips[0].id);
