@@ -12,6 +12,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card, CardContent } from '../ui/card';
+import { Sidebar } from './Sidebar';
 
 export const VendorTripsPage: React.FC = () => {
     const { navigateToVendorDashboard, navigateToVendorAddTrip, trips, deleteTrip } = useAppState();
@@ -100,6 +101,7 @@ export const VendorTripsPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-slate-50">
+            <Sidebar />
             <div className="pl-64 transition-all duration-300">
                 <main className="p-8 max-w-[1600px] mx-auto min-h-screen">
                     {/* Header */}
