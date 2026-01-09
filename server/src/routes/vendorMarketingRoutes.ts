@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect } from '../middleware/auth';
+import { protect } from '../middleware/authMiddleware';
 import { purchaseCredits, getCreditHistory, getCreditBalance } from '../controllers/vendorCreditController';
 import { promoteTrip, getActivePromotions, cancelPromotion } from '../controllers/promotionController';
 
