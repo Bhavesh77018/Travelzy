@@ -46,6 +46,10 @@ export interface VendorUser {
     mobile?: string;
     credits: number;
     status: 'PENDING' | 'VERIFIED' | 'REJECTED';
+    description?: string;
+    website?: string;
+    phone?: string;
+    address?: string;
     documents?: {
         type: 'company' | 'individual';
         urls: string[];
@@ -162,6 +166,7 @@ export interface AppState {
     // Messaging State
     messages: Message[];
     conversations: Conversation[];
+    token: string | null;
 }
 
 export interface Booking {

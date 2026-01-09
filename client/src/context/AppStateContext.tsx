@@ -50,6 +50,7 @@ const INITIAL_STATE: AppState = {
     vendors: MOCK_VENDORS,
     messages: [],
     conversations: [],
+    token: localStorage.getItem('token'),
 };
 
 // Define the Context Type
