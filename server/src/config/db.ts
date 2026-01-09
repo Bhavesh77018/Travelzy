@@ -1,20 +1,40 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 
-dotenv.config();
+// Cache the database connection
+let cachedConnection: typeof mongoose | null = null;
 
 const connectDB = async () => {
+    // If we have a cached connection, reuse it
+    if (cachedConnection && mongoose.connection.readyState === 1) {
+        console.log('Using cached MongoDB connection');
+        return cachedConnection;
+    }
+
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI || '', {});
+        const mongoUri = process.env.MONGO_URI;
+
+        if (!mongoUri) {
+            throw new Error('MONGO_URI environment variable is not defined');
+        }
+
+        console.log('Creating new MongoDB connection...');
+
+        // Connect with optimized settings for serverless
+        const conn = await mongoose.connect(mongoUri, {
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+            socketTimeoutMS: 45000,
+        });
 
         console.log(`MongoDB Connected: ${conn.connection.host}`);
+
+        // Cache the connection
+        cachedConnection = conn;
+
+        return conn;
     } catch (error) {
-        if (error instanceof Error) {
-            console.error(`Error: ${error.message}`);
-        } else {
-            console.error('Unknown DB connection error');
-        }
-        process.exit(1);
+        console.error('MongoDB connection error:', error);
+        // Don't call process.exit in serverless - just throw the error
+        throw error;
     }
 };
 
