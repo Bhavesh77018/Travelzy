@@ -10,6 +10,7 @@ import tripRoutes from './routes/tripRoutes';
 import bookingRoutes from './routes/bookingRoutes';
 import vendorRoutes from './routes/vendorRoutes';
 import marketingRoutes from './routes/marketingRoutes';
+import vendorMarketingRoutes from './routes/vendorMarketingRoutes';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/vendors', vendorRoutes);
+app.use('/api/vendors', vendorMarketingRoutes); // Marketing routes
 app.use('/api/marketing', marketingRoutes);
 
 // Error Handler

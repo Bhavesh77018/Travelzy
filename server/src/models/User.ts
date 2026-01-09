@@ -23,6 +23,33 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    credits: {
+        type: Number,
+        default: 0,
+    },
+    creditTransactions: [{
+        type: {
+            type: String,
+            enum: ['purchase', 'spent', 'refund'],
+            required: true
+        },
+        amount: {
+            type: Number,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        relatedTripId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Trip'
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now
+        }
+    }],
 }, {
     timestamps: true,
 });

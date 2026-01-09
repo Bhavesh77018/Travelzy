@@ -66,6 +66,30 @@ const tripSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    promotions: [{
+        type: {
+            type: String,
+            enum: ['homepage_spotlight', 'email_campaign', 'social_boost'],
+            required: true
+        },
+        startDate: {
+            type: Date,
+            required: true
+        },
+        endDate: {
+            type: Date,
+            required: true
+        },
+        creditsSpent: {
+            type: Number,
+            required: true
+        },
+        status: {
+            type: String,
+            enum: ['active', 'completed', 'cancelled'],
+            default: 'active'
+        }
+    }],
     adminComments: String
 }, {
     timestamps: true
