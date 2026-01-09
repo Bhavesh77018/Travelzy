@@ -88,125 +88,208 @@ export const MarketingTools: React.FC = () => {
         <div className="min-h-screen bg-gray-50/50">
             <Sidebar />
             <div className="pl-64">
-                <header className="bg-white border-b border-gray-100 px-8 py-6 flex justify-between items-center">
+                {/* Glassmorphic Header */}
+                <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/70 border-b border-gray-100/50 px-8 py-6 flex justify-between items-center transition-all duration-300">
                     <div>
-                        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Marketing Center</h1>
-                        <p className="text-gray-500">Promote your trips and reach more travelers.</p>
+                        <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 tracking-tight">Marketing Center</h1>
+                        <p className="text-gray-500 font-medium">Promote your trips to thousands of travelers.</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="bg-gradient-to-r from-amber-200 to-yellow-400 px-4 py-2 rounded-xl flex items-center gap-2 font-bold shadow-lg shadow-amber-500/20">
-                            <Zap className="h-5 w-5 text-amber-700" />
-                            <span className="text-amber-900">
-                                {isLoading ? '...' : credits.toLocaleString()} Credits
+                        <div className="animate-in fade-in slide-in-from-top-4 duration-700 bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200/50 px-5 py-2.5 rounded-2xl flex items-center gap-3 font-bold shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all cursor-default group">
+                            <div className="bg-white p-1.5 rounded-full shadow-sm group-hover:scale-110 transition-transform duration-300">
+                                <Zap className="h-4 w-4 text-amber-500 fill-amber-500" />
+                            </div>
+                            <span className="text-amber-950 font-extrabold text-lg tabular-nums tracking-tight">
+                                {isLoading ? '...' : credits.toLocaleString()} <span className="text-amber-700/70 text-sm font-semibold ml-0.5">Credits</span>
                             </span>
                         </div>
-                        <Button onClick={() => setShowPurchaseModal(true)} className="gap-2">
-                            <ShoppingCart className="h-4 w-4" />
+                        <Button
+                            onClick={() => setShowPurchaseModal(true)}
+                            className="bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/10 hover:shadow-gray-900/20 rounded-xl px-6 h-12 font-semibold transition-all hover:scale-[1.02]"
+                        >
+                            <ShoppingCart className="h-4 w-4 mr-2" />
                             Buy Credits
                         </Button>
                     </div>
                 </header>
 
-                <main className="p-8 space-y-8">
+                <main className="p-8 space-y-10 max-w-7xl mx-auto">
                     {/* Promotion Actions */}
-                    <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-xl font-bold">Promotion Types</h2>
-                            <Button onClick={() => setShowPromoteModal(true)} className="gap-2">
-                                <Plus className="h-4 w-4" />
-                                Promote a Trip
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-1">
+                                <h2 className="text-2xl font-bold text-gray-900">Start a Promotion</h2>
+                                <p className="text-gray-500">Choose how you want to reach your audience.</p>
+                            </div>
+                            <Button variant="outline" onClick={() => setShowPromoteModal(true)} className="rounded-xl border-dashed border-2 hover:border-solid hover:bg-gray-50">
+                                <Plus className="h-4 w-4 mr-2" />
+                                Custom Promotion
                             </Button>
                         </div>
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 group">
-                                <CardHeader>
-                                    <div className="h-12 w-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
-                                        <Mail className="h-6 w-6" />
+                            {/* Email Campaign Card */}
+                            <div className="group relative bg-white rounded-3xl p-1 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-1">
+                                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-blue-50/50 to-transparent rounded-t-[1.3rem]" />
+                                <div className="relative p-7 space-y-6">
+                                    <div className="flex justify-between items-start">
+                                        <div className="h-14 w-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+                                            <Mail className="h-7 w-7" />
+                                        </div>
+                                        <div className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full">
+                                            Most Effective
+                                        </div>
                                     </div>
-                                    <CardTitle>Email Campaigns</CardTitle>
-                                    <CardDescription>Send newsletters to our subscriber base.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-sm font-medium text-gray-500 mb-4">Cost: 50 Credits</div>
-                                    <Button className="w-full" onClick={() => setShowPromoteModal(true)}>
+                                    <div className="space-y-2">
+                                        <h3 className="text-xl font-bold text-gray-900">Email Campaigns</h3>
+                                        <p className="text-gray-500 leading-relaxed text-sm">Send targeted newsletters directly to our subscriber base interested in your destination.</p>
+                                    </div>
+                                    <div className="pt-4 flex items-center justify-between border-t border-gray-50">
+                                        <div className="text-sm font-semibold text-gray-400">
+                                            Cost per blast
+                                        </div>
+                                        <div className="text-lg font-black text-gray-900">
+                                            50 <span className="text-xs font-medium text-gray-400">Credits</span>
+                                        </div>
+                                    </div>
+                                    <Button className="w-full bg-white hover:bg-blue-50 border-2 border-blue-100 hover:border-blue-200 text-blue-700 font-bold rounded-xl h-11 shadow-sm" variant="ghost" onClick={() => setShowPromoteModal(true)}>
                                         Create Campaign
                                     </Button>
-                                </CardContent>
-                            </Card>
-                            <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 group">
-                                <CardHeader>
-                                    <div className="h-12 w-12 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition-transform">
-                                        <Share2 className="h-6 w-6" />
+                                </div>
+                            </div>
+
+                            {/* Social Boost Card */}
+                            <div className="group relative bg-white rounded-3xl p-1 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-500 hover:-translate-y-1">
+                                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-purple-50/50 to-transparent rounded-t-[1.3rem]" />
+                                <div className="relative p-7 space-y-6">
+                                    <div className="flex justify-between items-start">
+                                        <div className="h-14 w-14 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+                                            <Share2 className="h-7 w-7" />
+                                        </div>
+                                        <div className="bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1.5 rounded-full">
+                                            Best Value
+                                        </div>
                                     </div>
-                                    <CardTitle>Social Boost</CardTitle>
-                                    <CardDescription>Auto-post to Facebook and Instagram.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-sm font-medium text-gray-500 mb-4">Cost: 25 Credits</div>
-                                    <Button className="w-full" variant="secondary" onClick={() => setShowPromoteModal(true)}>
+                                    <div className="space-y-2">
+                                        <h3 className="text-xl font-bold text-gray-900">Social Boost</h3>
+                                        <p className="text-gray-500 leading-relaxed text-sm">Automated posts to our Facebook and Instagram pages to boost your trip's visibility.</p>
+                                    </div>
+                                    <div className="pt-4 flex items-center justify-between border-t border-gray-50">
+                                        <div className="text-sm font-semibold text-gray-400">
+                                            Cost per post
+                                        </div>
+                                        <div className="text-lg font-black text-gray-900">
+                                            25 <span className="text-xs font-medium text-gray-400">Credits</span>
+                                        </div>
+                                    </div>
+                                    <Button className="w-full bg-white hover:bg-purple-50 border-2 border-purple-100 hover:border-purple-200 text-purple-700 font-bold rounded-xl h-11 shadow-sm" variant="ghost" onClick={() => setShowPromoteModal(true)}>
                                         Boost Post
                                     </Button>
-                                </CardContent>
-                            </Card>
-                            <Card className="border-none shadow-md hover:shadow-xl transition-all duration-300 group">
-                                <CardHeader>
-                                    <div className="h-12 w-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
-                                        <TrendingUp className="h-6 w-6" />
+                                </div>
+                            </div>
+
+                            {/* Homepage Spotlight Card */}
+                            <div className="group relative bg-white rounded-3xl p-1 border-2 border-amber-100 shadow-lg shadow-amber-500/5 hover:shadow-2xl hover:shadow-amber-500/15 transition-all duration-500 hover:-translate-y-1 overflow-hidden">
+                                <div className="absolute top-0 right-0 p-3">
+                                    <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full shadow-lg">
+                                        Premium
                                     </div>
-                                    <CardTitle>Homepage Spotlight</CardTitle>
-                                    <CardDescription>Get featured on the main landing page.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-sm font-medium text-gray-500 mb-4">Cost: 200 Credits/Day</div>
-                                    <Button className="w-full" variant="outline" onClick={() => setShowPromoteModal(true)}>
+                                </div>
+                                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-amber-50/50 to-transparent" />
+                                <div className="relative p-7 space-y-6">
+                                    <div className="h-14 w-14 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+                                        <TrendingUp className="h-7 w-7" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-xl font-bold text-gray-900">Homepage Spotlight</h3>
+                                        <p className="text-gray-500 leading-relaxed text-sm">Get featured in the "Trending" section on our main landing page for maximum exposure.</p>
+                                    </div>
+                                    <div className="pt-4 flex items-center justify-between border-t border-gray-50">
+                                        <div className="text-sm font-semibold text-gray-400">
+                                            Daily Rate
+                                        </div>
+                                        <div className="text-lg font-black text-gray-900">
+                                            200 <span className="text-xs font-medium text-gray-400">Credits</span>
+                                        </div>
+                                    </div>
+                                    <Button className="w-full bg-gradient-to-r from-gray-900 to-gray-800 hover:from-black hover:to-gray-900 text-white font-bold rounded-xl h-11 shadow-lg shadow-gray-900/10 border-0" onClick={() => setShowPromoteModal(true)}>
                                         Promote Now
                                     </Button>
-                                </CardContent>
-                            </Card>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     {/* Active Promotions */}
-                    <Card className="border-none shadow-lg">
-                        <CardHeader>
-                            <CardTitle>Active Promotions</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {activePromotions.length === 0 ? (
-                                <div className="text-center py-8 text-muted-foreground">
-                                    No active promotions. Start promoting your trips to reach more customers!
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    {activePromotions.map((promo) => (
-                                        <div key={promo.tripId} className="space-y-2">
-                                            <div className="font-semibold text-lg">{promo.tripTitle} - {promo.destination}</div>
-                                            {promo.promotions.map((p, idx) => (
-                                                <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="bg-green-100 p-2 rounded-lg text-green-600 font-bold text-xs">
-                                                            ACTIVE
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-bold">{formatPromotionType(p.type)}</div>
-                                                            <div className="text-xs text-gray-500">
-                                                                Started {new Date(p.startDate).toLocaleDateString()} •
-                                                                Ends {new Date(p.endDate).toLocaleDateString()}
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-bold text-gray-900">Active Campaigns</h2>
+                        <Card className="border-none shadow-xl shadow-gray-200/40 bg-white/50 backdrop-blur-sm">
+                            <CardContent className="p-6">
+                                {activePromotions.length === 0 ? (
+                                    <div className="text-center py-16 px-4">
+                                        <div className="bg-gray-50 h-20 w-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <Zap className="h-8 w-8 text-gray-300" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">No active promotions</h3>
+                                        <p className="text-gray-500 max-w-sm mx-auto mb-8">
+                                            Start a new campaign to boost your visibility and get more bookings today.
+                                        </p>
+                                        <Button onClick={() => setShowPromoteModal(true)} variant="outline" className="rounded-xl">
+                                            Create First Campaign
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        {activePromotions.map((promo) => (
+                                            <div key={promo.tripId} className="space-y-4">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <h3 className="font-bold text-gray-900 text-lg">{promo.tripTitle}</h3>
+                                                    <span className="text-gray-400">•</span>
+                                                    <span className="text-gray-500">{promo.destination}</span>
+                                                </div>
+                                                <div className="grid gap-4">
+                                                    {promo.promotions.map((p, idx) => (
+                                                        <div key={idx} className="group flex flex-col md:flex-row md:items-center justify-between p-5 bg-white border border-gray-100 rounded-2xl hover:border-gray-200 hover:shadow-lg transition-all duration-300">
+                                                            <div className="flex items-start gap-5 mb-4 md:mb-0">
+                                                                <div className={`p-3 rounded-xl ${p.type.includes('homepage') ? 'bg-amber-100 text-amber-600' :
+                                                                        p.type.includes('social') ? 'bg-purple-100 text-purple-600' :
+                                                                            'bg-blue-100 text-blue-600'
+                                                                    }`}>
+                                                                    {p.type.includes('homepage') ? <TrendingUp className="h-5 w-5" /> :
+                                                                        p.type.includes('social') ? <Share2 className="h-5 w-5" /> :
+                                                                            <Mail className="h-5 w-5" />}
+                                                                </div>
+                                                                <div>
+                                                                    <div className="flex items-center gap-3 mb-1">
+                                                                        <div className="font-bold text-gray-900">{formatPromotionType(p.type)}</div>
+                                                                        <div className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide border border-green-200">
+                                                                            Active
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="text-sm text-gray-500 font-medium">
+                                                                        {new Date(p.startDate).toLocaleDateString()} — {new Date(p.endDate).toLocaleDateString()}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center gap-8 pl-14 md:pl-0">
+                                                                <div className="text-right">
+                                                                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Investment</div>
+                                                                    <div className="font-bold text-gray-900">{p.creditsSpent} credits</div>
+                                                                </div>
+                                                                <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg">
+                                                                    Cancel
+                                                                </Button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <div className="font-bold text-lg">{p.creditsSpent} credits</div>
-                                                        <div className="text-xs text-gray-500">Total Spent</div>
-                                                    </div>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
                 </main>
             </div>
 

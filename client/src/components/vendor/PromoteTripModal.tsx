@@ -5,6 +5,7 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
+import { TrendingUp, Mail, Share2 } from 'lucide-react';
 import { API_BASE_URL } from '../../config';
 import type { Trip } from '../../types';
 
@@ -19,26 +20,29 @@ const PROMOTION_TYPES = [
     {
         id: 'homepage_spotlight',
         name: 'Homepage Spotlight',
-        description: 'Feature your trip on the main landing page',
+        description: 'Get featured on the main landing page for maximum exposure.',
         cost: 200,
         unit: 'per day',
-        requiresDuration: true
+        requiresDuration: true,
+        icon: TrendingUp
     },
     {
         id: 'email_campaign',
         name: 'Email Campaign',
-        description: 'Send to our subscriber base',
+        description: 'Send targeted emails to our subscriber base.',
         cost: 50,
         unit: 'one-time',
-        requiresDuration: false
+        requiresDuration: false,
+        icon: Mail
     },
     {
         id: 'social_boost',
         name: 'Social Media Boost',
-        description: 'Auto-post to Facebook and Instagram',
+        description: 'Auto-post promotion to Facebook & Instagram pages.',
         cost: 25,
         unit: 'one-time',
-        requiresDuration: false
+        requiresDuration: false,
+        icon: Share2
     }
 ];
 
@@ -60,6 +64,7 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
         }
     }, [open]);
 
+    // ... fetchPublishedTrips and handlePromote same as before ...
     const fetchPublishedTrips = async () => {
         setIsLoading(true);
         try {
@@ -72,7 +77,6 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
 
             if (response.ok) {
                 const data = await response.json();
-                // Filter for published trips only
                 const publishedTrips = data.filter((trip: Trip) => trip.status === 'APPROVED');
                 setTrips(publishedTrips);
                 if (publishedTrips.length > 0) {
@@ -132,31 +136,40 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl">Promote Your Trip</DialogTitle>
-                    <DialogDescription>
-                        Select a trip and promotion type to boost visibility
-                    </DialogDescription>
-                </DialogHeader>
+            <DialogContent className="max-w-3xl p-0 overflow-hidden border-none shadow-2xl bg-white">
+                <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white px-8 py-6">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold flex items-center gap-3">
+                            Promote Your Trip
+                        </DialogTitle>
+                        <DialogDescription className="text-gray-300">
+                            Boost visibility and get more bookings in just a few clicks.
+                        </DialogDescription>
+                    </DialogHeader>
+                </div>
 
-                <div className="space-y-6 mt-4">
+                <div className="p-8 space-y-8">
                     {/* Trip Selection */}
-                    <div>
-                        <Label htmlFor="trip">Select Trip</Label>
+                    <div className="space-y-3">
+                        <Label className="text-base font-semibold text-gray-900">Select Trip to Promote</Label>
                         {isLoading ? (
-                            <div className="text-sm text-muted-foreground">Loading trips...</div>
+                            <div className="h-12 w-full bg-gray-50 animate-pulse rounded-xl" />
                         ) : trips.length === 0 ? (
-                            <div className="text-sm text-muted-foreground">No published trips available</div>
+                            <div className="text-center p-8 bg-gray-50 rounded-xl border-dashed border-2 border-gray-200">
+                                <p className="text-gray-500 font-medium">No published trips found.</p>
+                                <p className="text-xs text-gray-400">Please publish a trip before promoting.</p>
+                            </div>
                         ) : (
                             <Select value={selectedTripId} onValueChange={setSelectedTripId}>
-                                <SelectTrigger id="trip">
-                                    <SelectValue />
+                                <SelectTrigger className="w-full h-14 rounded-xl border-gray-200 bg-gray-50/50 hover:bg-white transition-colors text-lg px-4">
+                                    <SelectValue placeholder="Select a trip..." />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {trips.map((trip) => (
-                                        <SelectItem key={trip.id} value={trip.id}>
-                                            {trip.title} - {trip.destination}
+                                        <SelectItem key={trip.id} value={trip.id} className="py-3">
+                                            <span className="font-semibold text-gray-900">{trip.title}</span>
+                                            <span className="text-gray-400 mx-2">•</span>
+                                            <span className="text-gray-500">{trip.destination}</span>
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -165,70 +178,90 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
                     </div>
 
                     {/* Promotion Type */}
-                    <div>
-                        <Label htmlFor="promotion-type">Promotion Type</Label>
-                        <Select value={promotionType} onValueChange={setPromotionType}>
-                            <SelectTrigger id="promotion-type">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {PROMOTION_TYPES.map((promo) => (
-                                    <SelectItem key={promo.id} value={promo.id}>
-                                        {promo.name} - {promo.cost} credits {promo.unit}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {selectedPromotion && (
-                            <p className="text-sm text-muted-foreground mt-1">{selectedPromotion.description}</p>
-                        )}
+                    <div className="space-y-3">
+                        <Label className="text-base font-semibold text-gray-900">Choose Promotion Type</Label>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {PROMOTION_TYPES.map((type) => {
+                                const Icon = type.icon;
+                                const isSelected = promotionType === type.id;
+                                return (
+                                    <div
+                                        key={type.id}
+                                        onClick={() => setPromotionType(type.id)}
+                                        className={`cursor-pointer rounded-2xl border-2 p-4 transition-all duration-300 hover:scale-[1.02] ${isSelected
+                                            ? 'border-gray-900 bg-gray-50 ring-1 ring-gray-900/5'
+                                            : 'border-gray-100 hover:border-gray-200'
+                                            }`}
+                                    >
+                                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center mb-3 ${isSelected ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+                                            }`}>
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+                                        <h3 className={`font-bold text-sm mb-1 ${isSelected ? 'text-gray-900' : 'text-gray-700'}`}>{type.name}</h3>
+                                        <div className="text-xs text-gray-500 leading-tight mb-3 min-h-[40px]">{type.description}</div>
+                                        <div className="font-bold text-gray-900">{type.cost} Credits <span className="text-[10px] text-gray-400 uppercase font-medium">{type.unit}</span></div>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
 
-                    {/* Duration (for homepage spotlight) */}
+                    {/* Duration (if needed) */}
                     {selectedPromotion?.requiresDuration && (
-                        <div>
-                            <Label htmlFor="duration">Duration (days)</Label>
-                            <Input
-                                id="duration"
-                                type="number"
-                                min="1"
-                                max="30"
-                                value={duration}
-                                onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
-                            />
+                        <div className="space-y-3 animate-in slide-in-from-top-2 fade-in duration-300">
+                            <Label className="text-base font-semibold text-gray-900">Duration (Days)</Label>
+                            <div className="flex items-center gap-4">
+                                <Input
+                                    type="number"
+                                    min="1"
+                                    max="30"
+                                    value={duration}
+                                    onChange={(e) => setDuration(Math.max(1, parseInt(e.target.value) || 1))}
+                                    className="h-14 w-32 rounded-xl text-xl font-bold text-center border-gray-200"
+                                />
+                                <div className="text-sm text-gray-500">
+                                    Feature your trip on the homepage for {duration} days.
+                                </div>
+                            </div>
                         </div>
                     )}
 
-                    {/* Cost Summary */}
-                    <div className="bg-muted p-4 rounded-lg">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="font-semibold">Total Cost:</span>
-                            <span className="text-2xl font-bold">{totalCost} credits</span>
-                        </div>
-                        <div className="flex justify-between items-center text-sm">
-                            <span className="text-muted-foreground">Your Balance:</span>
-                            <span className={currentCredits >= totalCost ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
-                                {currentCredits} credits
-                            </span>
-                        </div>
-                        {!canAfford && (
-                            <div className="mt-2 text-sm text-red-600">
-                                Insufficient credits. You need {totalCost - currentCredits} more credits.
+                    {/* Footer / Cost Summary */}
+                    <div className="bg-gray-50 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="space-y-1">
+                            <div className="text-sm font-medium text-gray-500">Total Investment</div>
+                            <div className="text-4xl font-black text-gray-900 tracking-tight">
+                                {totalCost} <span className="text-base font-bold text-gray-400">Credits</span>
                             </div>
-                        )}
-                    </div>
-                </div>
+                            <div className={`text-sm font-semibold flex items-center gap-2 ${canAfford ? 'text-green-600' : 'text-red-500'}`}>
+                                {canAfford ? (
+                                    <>
+                                        Available Balance: {currentCredits} Credits
+                                    </>
+                                ) : (
+                                    <>
+                                        Insufficient Balance ({currentCredits} Credits)
+                                    </>
+                                )}
+                            </div>
+                        </div>
 
-                <div className="flex justify-end gap-3 mt-6">
-                    <Button variant="outline" onClick={onClose} disabled={isProcessing}>
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handlePromote}
-                        disabled={isProcessing || !canAfford || trips.length === 0}
-                    >
-                        {isProcessing ? 'Processing...' : 'Promote Trip'}
-                    </Button>
+                        <div className="flex gap-3 w-full md:w-auto">
+                            <Button variant="ghost" onClick={onClose} disabled={isProcessing} className="flex-1 md:flex-none h-14 px-6 rounded-xl font-semibold text-gray-500 hover:text-gray-900">
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={handlePromote}
+                                disabled={isProcessing || !canAfford || trips.length === 0}
+                                className={`flex-1 md:flex-none h-14 px-10 rounded-xl font-bold text-lg shadow-lg transition-all hover:scale-105 ${canAfford
+                                    ? 'bg-gray-900 hover:bg-black text-white shadow-gray-900/20'
+                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    }`}
+                            >
+                                {isProcessing ? 'Processing...' : 'Promote Trip'}
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>
