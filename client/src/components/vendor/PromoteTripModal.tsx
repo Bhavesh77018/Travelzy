@@ -63,7 +63,7 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
     const fetchPublishedTrips = async () => {
         setIsLoading(true);
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/trips`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -100,7 +100,7 @@ export const PromoteTripModal: React.FC<PromoteTripModalProps> = ({ open, onClos
 
         setIsProcessing(true);
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/vendors/trips/${selectedTripId}/promote`, {
                 method: 'POST',
                 headers: {

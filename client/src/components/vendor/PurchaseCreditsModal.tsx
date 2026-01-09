@@ -26,7 +26,7 @@ export const PurchaseCreditsModal: React.FC<PurchaseCreditsModalProps> = ({ open
     const handlePurchase = async () => {
         setIsProcessing(true);
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/vendors/credits/purchase`, {
                 method: 'POST',
                 headers: {
@@ -71,8 +71,8 @@ export const PurchaseCreditsModal: React.FC<PurchaseCreditsModalProps> = ({ open
                         <Card
                             key={pkg.credits}
                             className={`cursor-pointer transition-all ${selectedPackage.credits === pkg.credits
-                                    ? 'ring-2 ring-primary shadow-lg scale-105'
-                                    : 'hover:shadow-md'
+                                ? 'ring-2 ring-primary shadow-lg scale-105'
+                                : 'hover:shadow-md'
                                 } ${pkg.popular ? 'border-primary' : ''}`}
                             onClick={() => setSelectedPackage(pkg)}
                         >

@@ -35,7 +35,7 @@ export const MarketingTools: React.FC = () => {
 
     const fetchCreditBalance = async () => {
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/vendors/credits/balance`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -55,7 +55,7 @@ export const MarketingTools: React.FC = () => {
 
     const fetchActivePromotions = async () => {
         try {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/vendors/promotions`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
